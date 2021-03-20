@@ -9,6 +9,14 @@ import {
 import FileValidator from '../FileValidator';
 
 describe('FileValidator', () => {
+  /** Instantiate mocks */
+
+  const FsMock = jest.fn<Partial<typeof fs>, []>();
+  const fsMock = new FsMock() as typeof fs;
+
+  const PathMock = jest.fn<Partial<PlatformPath>, []>();
+  const pathMock = new PathMock() as PlatformPath;
+
   it('should throw an Error (with expected message) on missing file path', () => {
     const SUT = new FileValidator(fs, path);
 
@@ -18,14 +26,10 @@ describe('FileValidator', () => {
   });
 
   it('should throw an Error (with expected message) on file not found', () => {
-    const FsMock = jest.fn<Partial<typeof fs>, []>();
-    const fsMock = new FsMock() as typeof fs;
-    fsMock.existsSync = jest.fn(() => {
-      return false;
-    });
+    const filePath = 'FILE_NOT_FOUND';
+    fsMock.existsSync = jest.fn().mockReturnValue(false);
 
     const SUT = new FileValidator(fsMock, path);
-    const filePath = 'FILE_NOT_FOUND';
 
     expect(SUT.readFile.bind(SUT, filePath)).toThrowError(
       new Error(fileNotFoundErrorMessage)
@@ -35,20 +39,12 @@ describe('FileValidator', () => {
   });
 
   it('should throw an Error (with expected message) on invalid file', () => {
-    const FsMock = jest.fn<Partial<typeof fs>, []>();
-    const fsMock = new FsMock() as typeof fs;
-    fsMock.existsSync = jest.fn(() => {
-      return true;
-    });
+    const filePath = 'INVALID_FILE';
 
-    const PathMock = jest.fn<Partial<PlatformPath>, []>();
-    const pathMock = new PathMock() as PlatformPath;
-    pathMock.extname = jest.fn(() => {
-      return 'EXTENSION_ERROR';
-    });
+    fsMock.existsSync = jest.fn().mockReturnValue(true);
+    pathMock.extname = jest.fn().mockReturnValue('EXTENSION_ERROR');
 
     const SUT = new FileValidator(fsMock, pathMock);
-    const filePath = 'INVALID_FILE';
 
     expect(SUT.readFile.bind(SUT, filePath)).toThrowError(
       new Error(invalidFileErrorMessage)
@@ -59,22 +55,13 @@ describe('FileValidator', () => {
 
   it('should return the file content', () => {
     const expectedFileContent = 'FILE_CONTENT';
+    const filePath = 'FILE';
 
-    const FsMock = jest.fn<Partial<typeof fs>, []>();
-    const fsMock = new FsMock() as typeof fs;
-    fsMock.existsSync = jest.fn(() => {
-      return true;
-    });
+    fsMock.existsSync = jest.fn().mockReturnValue(true);
     fsMock.readFileSync = jest.fn().mockReturnValue(expectedFileContent);
-
-    const PathMock = jest.fn<Partial<PlatformPath>, []>();
-    const pathMock = new PathMock() as PlatformPath;
-    pathMock.extname = jest.fn(() => {
-      return '.txt';
-    });
+    pathMock.extname = jest.fn().mockReturnValue('.txt');
 
     const SUT = new FileValidator(fsMock, pathMock);
-    const filePath = 'FILE';
 
     expect(SUT.readFile(filePath)).toBe(expectedFileContent);
     expect(fsMock.readFileSync).toBeCalledTimes(1);
