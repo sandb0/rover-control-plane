@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { PlatformPath } from 'path';
+
 import {
   fileNotFoundErrorMessage,
   invalidFileErrorMessage,

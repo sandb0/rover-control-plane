@@ -4,7 +4,6 @@
   "main": "src/index.ts",
   "author": "Pedro Henrique <sandbox0@hotmail.com>",
   "license": "MIT",
-  "type": "module",
   "devDependencies": {
     "@commitlint/config-conventional": "^12.0.1",
     "@types/jest": "^26.0.21",
@@ -31,7 +30,7 @@
   "scripts": {
     "start:dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules --no-notify src/index.ts",
     "start": "yarn build && node build/index.js",
-    "build": "yarn build:clean && tsc",
+    "build": "yarn build:clean && tsc -p tsconfig.prod.json",
     "build:clean": "tsc --build --clean && rimraf build",
     "lint:tsc": "tsc -p tsconfig.json --noEmit",
     "lint:prettier": "prettier --write .",
