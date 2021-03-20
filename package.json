@@ -1,0 +1,10 @@
+{
+  "name": "rover-control-plane",
+  "version": "0.0.1",
+  "main": "src/index.ts",
+  "author": "Pedro Henrique <sandbox0@hotmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.2.3"
+  }
+}
