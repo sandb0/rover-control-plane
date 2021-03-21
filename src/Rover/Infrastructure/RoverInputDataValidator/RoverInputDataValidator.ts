@@ -141,11 +141,11 @@ export default class RoverInputDataValidator {
   }
 
   private roverMovementInstructionMustBeValidRule(
-    roverMovementInstruction: string
+    roverMovementInstructions: string
   ) {
-    if (/[^LRM]/.test(roverMovementInstruction)) {
+    if (/[^LRM]/.test(roverMovementInstructions)) {
       throw new Error(
-        'Invalid rover movement instructions: ' + roverMovementInstruction
+        'Invalid rover movement instructions: ' + roverMovementInstructions
       );
     }
   }
