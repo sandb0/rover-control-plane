@@ -2,14 +2,30 @@ import fs from 'fs';
 import path from 'path';
 
 import { FileValidator } from './libs';
-import RoverInputDataValidator from './Rover/Infrastructure/RoverInputDataValidator/RoverInputDataValidator';
+import { RoverInputDataValidator } from './Rover/Infrastructure';
+import { RoverMovementService } from './Rover/Application';
 
-const filePath = process.argv[2];
+try {
+  // Get file path.
+  const filePath = process.argv[2];
 
-const fileValidator = new FileValidator(fs, path);
-const fileData = fileValidator.readFile(filePath);
+  // Validate file.
+  const fileValidator = new FileValidator(fs, path);
+  const fileData = fileValidator.readFile(filePath);
 
-const roverInputDataValidator = new RoverInputDataValidator(fileData);
-console.log(roverInputDataValidator.plateauXAxisSize);
-console.log(roverInputDataValidator.plateauYAxisSize);
-console.log(roverInputDataValidator.roversInputData);
+  // Validate input data.
+  const roverInputDataValidator = new RoverInputDataValidator(fileData);
+
+  // Use a movement service.
+  const roverMovementService = new RoverMovementService(
+    roverInputDataValidator
+  );
+  const movedRovers = roverMovementService.getAndMoveAllRovers();
+
+  // Response.
+  movedRovers.forEach((rover) => {
+    console.log(rover.positionXAxis, rover.positionYAxis, rover.direction);
+  });
+} catch (error) {
+  console.log(error.message);
+}

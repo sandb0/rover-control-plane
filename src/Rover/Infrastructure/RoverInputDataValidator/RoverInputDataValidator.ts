@@ -79,15 +79,7 @@ export default class RoverInputDataValidator {
     ) {
       const roverMovementInstructions = this.lines[index];
 
-      for (
-        let _index = 0;
-        _index < roverMovementInstructions.length;
-        _index++
-      ) {
-        this.roverMovementInstructionMustBeValidRule(
-          roverMovementInstructions[_index]
-        );
-      }
+      this.roverMovementInstructionMustBeValidRule(roverMovementInstructions);
 
       this._roversInputData[
         roverOrder
@@ -149,15 +141,11 @@ export default class RoverInputDataValidator {
   }
 
   private roverMovementInstructionMustBeValidRule(
-    roverMovementInstruction: string
+    roverMovementInstructions: string
   ) {
-    if (
-      roverMovementInstruction !== 'L' &&
-      roverMovementInstruction !== 'R' &&
-      roverMovementInstruction !== 'M'
-    ) {
+    if (/[^LRM]/.test(roverMovementInstructions)) {
       throw new Error(
-        'Invalid rover movement instructions: ' + roverMovementInstruction
+        'Invalid rover movement instructions: ' + roverMovementInstructions
       );
     }
   }
