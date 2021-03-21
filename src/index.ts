@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { FileValidator } from './libs';
-import RoverInputDataValidator from './RoverInputDataValidator';
+import RoverInputDataValidator from './Rover/Infrastructure/RoverInputDataValidator/RoverInputDataValidator';
 
 const filePath = process.argv[2];
 
