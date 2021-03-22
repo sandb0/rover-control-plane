@@ -29,10 +29,12 @@ export default class FileValidator {
       throw new Error(invalidFileErrorMessage);
     }
 
-    return this.fileSystem.readFileSync(filePath, {
+    const fileContent = this.fileSystem.readFileSync(filePath, {
       encoding: 'utf8',
       flag: 'r',
     });
+
+    return fileContent.replace(/\r\n/g, '\n');
   }
 
   private filePathCannotBeEmptyRule(filePath: string) {
