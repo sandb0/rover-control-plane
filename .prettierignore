@@ -12,3 +12,5 @@ yarn*
 *ignore
 .husky
 .editorconfig
+*.pdf
+*.txt
